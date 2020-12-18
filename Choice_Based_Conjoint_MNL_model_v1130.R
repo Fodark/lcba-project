@@ -5,7 +5,7 @@
 ################################################################
 
 # set the directory where the data are located
-setwd("./LCBA/")
+setwd("./university/3.lcba/report")
 
 # load library for fitting multinomial logit models 
 library(mlogit)
@@ -90,6 +90,21 @@ coef(m3)["cameraHigh"]/(coef(m3)["as.numeric(as.character(price))"])
 coef(m3)["batteryMedium"]/(coef(m3)["as.numeric(as.character(price))"])
 coef(m3)["batteryHigh"]/(coef(m3)["as.numeric(as.character(price))"])
 
+# New dataset with price ranges
+new_df <- smartphones
+new_df$price <- as.numeric(as.character(new_df$price))
+new_df$price <- cut(new_df$price, c(-Inf, 200, 300, 500, 900, Inf), c("L","ML", "M", "MH", "H"))
+new_df$price <- factor(new_df$price, levels = c("L","ML", "M", "MH", "H"))
+
+new_df.mlogit <- dfidx(new_df, idx = list(c("quest.id", "resp.id"), "profile"), drop.index=F,
+                            levels=c("1", "2", "3"))
+
+# Fit the model without intercept parameters
+m4 <- mlogit(choice ~ price + ram.storage + os + display + 
+               dailyuse + camera + battery | -1, data = new_df.mlogit)
+summary(m4)
+
+
 # Simulate preference shares using the "predict.mnl" function 
 # Define the function
 predict.mnl <- function(model, data) {
@@ -107,15 +122,18 @@ predict.mnl <- function(model, data) {
 # for which you want to predict the preference shares. 
 # One way to do this is to create the full set of possible designs
 # using expand.grid() and select the designs we want by row number
-attributes <- list(ram.storage=names(table(smartphones.mlogit$ram.storage)),
-               os=names(table(smartphones.mlogit$os)),
-               display=names(table(smartphones.mlogit$display)),
-               dailyuse=names(table(smartphones.mlogit$dailyuse)),
-               camera=names(table(smartphones.mlogit$camera)),
-               battery=names(table(smartphones.mlogit$battery)),
-               price=names(table(smartphones.mlogit$price)))
+attributes <- list(ram.storage=names(table(new_df.mlogit$ram.storage)),
+               os=names(table(new_df.mlogit$os)),
+               display=names(table(new_df.mlogit$display)),
+               dailyuse=names(table(new_df.mlogit$dailyuse)),
+               camera=names(table(new_df.mlogit$camera)),
+               battery=names(table(new_df.mlogit$battery)),
+               price=names(table(new_df.mlogit$price)))
 allDesign <- expand.grid(attributes) 
 allDesign #all possible design
+
+allDesignLow <- allDesign[allDesign$price=="L" & allDesign$os=="Android",]
+allDesignLow
 
 # we choose a reasonable and realistic subset (where the first row indicates our design), such as
 new.data <- allDesign[c(8, 1, 3, 41, 49, 26), ]
