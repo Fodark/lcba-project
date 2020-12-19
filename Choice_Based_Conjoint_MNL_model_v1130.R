@@ -132,17 +132,45 @@ attributes <- list(ram.storage=names(table(new_df.mlogit$ram.storage)),
 allDesign <- expand.grid(attributes) 
 allDesign #all possible design
 
-allDesignLow <- allDesign[allDesign$price=="L" & allDesign$os=="Android",]
+allDesignLow <- allDesign[allDesign$price=="L" & allDesign$os=="Android" & allDesign$ram.storage=="4/64",]
+row.names(allDesignLow) <- NULL
 allDesignLow
+new.data.low <- allDesignLow[c(67, 55, 68, 59, 32, 40, 31, 38, 41, 14, 23),]
+new.data.low
+
+allDesignMLow <- allDesign[allDesign$price=="ML" & allDesign$os=="Android" & allDesign$ram.storage!="12/256",]
+row.names(allDesignMLow) <- NULL
+allDesignMLow
+new.data.medium.low <- allDesignMLow[c(143, 136, 119, 144, 132, 120, 88, 47, 48, 134, 83, 122, 11, 94),]
+new.data.medium.low
+
+allDesignMedium <- allDesign[allDesign$price=="M" & allDesign$os=="Android" & allDesign$ram.storage=="8/128",]
+row.names(allDesignMedium) <- NULL
+new.data.medium <- allDesignMedium[c(45, 69, 44, 68, 36, 60, 17, 18, 72),]
+new.data.medium
+
+allDesignMHigh <- allDesign[allDesign$price=="MH",]
+row.names(allDesignMHigh) <- NULL
+new.data.medium.high <- allDesignMHigh[c(319, 322, 242, 245, 302, 305, 249, 252, 320, 476, 297, 321, 429, 411),]
+new.data.medium.high
+
+allDesignHigh <- allDesign[allDesign$price=="H" & allDesign$ram.storage!="4/64",]
+row.names(allDesignHigh) <- NULL
+new.data.high <- allDesignHigh[c(202, 204, 213, 215, 94, 96, 178, 165, 18, 95, 20, 92, 90, 173, 175),]
+new.data.high
 
 # we choose a reasonable and realistic subset (where the first row indicates our design), such as
-new.data <- allDesign[c(8, 1, 3, 41, 49, 26), ]
-new.data
+#new.data <- allDesign[c(8, 1, 3, 41, 49, 26), ]
+#new.data
 
 # We then pass these designs to predict.mnl() to determine what customers
 # would choose if they had to pick among these six smartphones alternatives:
-predict.mnl(m3, new.data) # using m3 specification
-predict.mnl(m2, new.data) # using m2 specification
+predict.mnl(m4, new.data.low) # using m4 specification
+predict.mnl(m4, new.data.medium.low) # using m4 specification
+predict.mnl(m4, new.data.medium) # using m4 specification
+predict.mnl(m4, new.data.medium.high) # using m4 specification
+predict.mnl(m4, new.data.high) # using m4 specification
+#predict.mnl(m2, new.data) # using m2 specification
 
 # Compute and plot preference share sensitivity
 # Producing a sensitivity chart using R is relatively simple: we just need to loop through all
