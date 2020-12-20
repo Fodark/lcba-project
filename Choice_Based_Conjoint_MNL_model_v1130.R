@@ -407,7 +407,7 @@ BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nres
   bootdistr <- do.call(cbind, bootdistr)
   lowl <- (1-conflevel)/2
   upl <- 1-lowl  
-  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl))))
+  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl), na.rm = T)))
   pointpred <- predict.mixed.mnl(model, data, nresp)
   predictedShares <- cbind(pointpred[,1], bootperc, pointpred[,2:ncol(pointpred)])
   names(predictedShares)[1] <- "share" 
@@ -415,3 +415,17 @@ BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nres
 }
 
 BootCI.predict.mixed.mnl(m4.mixed2, new.data)
+
+# share       2.5%      97.5% ram.storage      os display dailyuse camera battery price
+# 403  0.031854328 0.04273707 0.04273707        4/64 Android  Medium   Medium Medium    High     L
+# 223  0.058678450 0.09363941 0.09363941        4/64 Android  Medium      Low Medium  Medium     L
+# 878  0.058508292 0.17224177 0.17224177       8/128 Android    High      Low Medium    High    ML
+# 914  0.346623376 0.18093017 0.18093017       8/128 Android    High     High Medium    High    ML
+# 1400 0.093521565 0.04122306 0.04122306       8/128 Android    High     High Medium    High     M
+# 1382 0.057787223 0.07034814 0.07034814       8/128 Android    High   Medium Medium    High     M
+# 1887 0.117215232 0.05581149 0.05581149      12/256 Android    High     High Medium    High    MH
+# 1779 0.042145878 0.01301538 0.01301538      12/256 Android    High     High   High  Medium    MH
+# 1763 0.081852186 0.19463009 0.19463009       8/128     iOS    High   Medium   High  Medium    MH
+# 2267 0.045208413 0.03383555 0.03383555       8/128     iOS    High     High   High  Medium     H
+# 2250 0.062132262 0.07041081 0.07041081      12/256     iOS    High   Medium   High  Medium     H
+# 2264 0.004472795 0.03117705 0.03117705       8/128 Android    High     High   High  Medium     H
