@@ -172,6 +172,67 @@ predict.mnl(m4, new.data.medium.high) # using m4 specification
 predict.mnl(m4, new.data.high) # using m4 specification
 #predict.mnl(m2, new.data) # using m2 specification
 
+# 68 0.371647862        4/64 Android  Medium   Medium Medium    High     L
+# 38 0.183155620        4/64 Android  Medium      Low Medium  Medium     L
+# 132 0.2795641555       8/128 Android    High      Low Medium    High    ML
+# 144 0.2623652226       8/128 Android    High     High Medium    High    ML
+# 72 0.369881271       8/128 Android    High     High Medium    High     M
+# 69 0.232265140       8/128 Android    High   Medium Medium    High     M
+# 429 0.148297931      12/256 Android    High     High Medium    High    MH
+# 321 0.121913149      12/256 Android    High     High   High  Medium    MH
+# 305 0.117483196       8/128     iOS    High   Medium   High  Medium    MH
+# 215 0.2581581870       8/128     iOS    High     High   High  Medium     H
+# 204 0.2424517227      12/256     iOS    High   Medium   High  Medium     H
+# 213 0.1124772553       8/128 Android    High     High   High  Medium     H
+
+#allDesign[allDesign$ram.storage=="" & allDesign$os=="" & allDesign$display=="" & allDesign$dailyuse=="" & allDesign$camera=="" & allDesign$battery=="" & allDesign$price==""]
+new.data <- allDesign[c(403, 223, 878, 914, 1400, 1382, 1887, 1779, 1763, 2267, 2250, 2264),]
+predict.mnl(m4, new.data) # using m4 specification
+
+library(parallel)
+BootCI.predict.mnl <- function(model, data, nsim=500, conflevel=0.95) {
+  dataModel <- model$model
+  dataModel$probabilities <- NULL
+  dataModel$linpred <- NULL
+  idx <- dataModel$idx 
+  dataModel$idx <- NULL
+  dataModel <- data.frame(dataModel, idx)
+  idVar <- unique(dataModel[,names(idx)[1]])
+  
+  bootstrapping <- function(x) {
+    idbootsamp <- data.frame(sample(idVar, replace=T))
+    names(idbootsamp) <- names(idx)[1]
+    bootsamp <- merge(idbootsamp, dataModel, by=names(idx)[1], all.x=T)
+    bootsamp[,names(idx)[1]] <- rep(1:length(table(idx[,1])), each=length(table(idx[,3])))
+    bootsamp.mlogit  <- dfidx(bootsamp, idx = list(c(names(idx)[1:2]), names(idx)[3]),
+                              drop.index=F)    
+    bootfit <- update(model, data = bootsamp.mlogit)
+    data.model <- model.matrix(update(bootfit$formula, 0 ~ .), data = data)[,-1]
+    logitUtility <- data.model%*%bootfit$coef
+    share <- exp(logitUtility)/sum(exp(logitUtility))
+    share
+  }
+  
+  cl <- makeCluster(detectCores())
+  clusterEvalQ(cl, library(mlogit))
+  clusterExport(cl, varlist=c("idVar", "dataModel", "idx", "model", "data"), 
+                envir=environment())
+  bootdistr <- parLapply(cl, 1:nsim, fun=bootstrapping)
+  stopCluster(cl)
+  
+  bootdistr <- do.call(cbind, bootdistr)
+  lowl <- (1-conflevel)/2
+  upl <- 1-lowl  
+  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl))))
+  pointpred <- predict.mnl(model, data)
+  predictedShares <- cbind(pointpred[,1], bootperc, pointpred[,2:ncol(pointpred)])
+  names(predictedShares)[1] <- "share" 
+  predictedShares
+}
+
+# Confidence intervals for preference share
+BootCI.predict.mnl(m4, new.data)
+
 # Compute and plot preference share sensitivity
 # Producing a sensitivity chart using R is relatively simple: we just need to loop through all
 # the attribute levels, compute a preference share prediction, and save the predicted preference share for
@@ -196,7 +257,7 @@ sensitivity.mnl <- function(model, attrib, base.data, competitor.data) {
 }
 base.data <- new.data[1,]
 competitor.data <- new.data[-1,]
-(tradeoff <- sensitivity.mnl(m2, attributes, base.data, competitor.data))
+(tradeoff <- sensitivity.mnl(m4, attributes, base.data, competitor.data))
 
 barplot(tradeoff$increase, horiz=FALSE, names.arg=tradeoff$level,
         ylab="Change in Share for the Planned Product Design", 
@@ -218,9 +279,9 @@ grid(nx=NA, ny=NULL)
 # analysis, we assume that all the coefficients are normally distributed across the population
 # and call our vector "m2.rpar".
 
-m2.rpar <- rep("n", length=length(m2$coef))
-names(m2.rpar) <- names(m2$coef)
-m2.rpar
+m4.rpar <- rep("n", length=length(m4$coef))
+names(m4.rpar) <- names(m4$coef)
+m4.rpar
 
 # We pass this vector to mlogit as the rpar parameter, which is short for ?random
 # parameters?. In addition, we tell mlogit that we have multiple choice observations
@@ -228,46 +289,46 @@ m2.rpar
 # parameters to be correlated with each other. For this first run, we assume that we do
 # not want random parameters to be correlated (correlation=FALSE), a setting
 # we reconsider below.
-m2.mixed <- mlogit(choice ~ seat + engine + cargo + price | -1, 
-                  data = smartphones.mlogit, 
-                  panel=TRUE, rpar = m2.rpar, correlation = FALSE)
-summary(m2.mixed)
+m4.mixed <- mlogit(choice ~ price + ram.storage + os + display + 
+                     dailyuse + camera + battery | -1, data = new_df.mlogit,
+                  panel=TRUE, rpar = m4.rpar, correlation = FALSE)
+summary(m4.mixed)
 
 # We can get a visual summary of the distribution of random effects and hence of the level of heterogeneity
-plot(m2.mixed)
+plot(m4.mixed)
 
 # We can extract the distribution of specific random effects using the function rpar()
-seat8.distr <- rpar(m2.mixed, "seat8")
-summary(seat8.distr)
-mean(seat8.distr)
-med(seat8.distr)
-plot(seat8.distr)
+iOS.distr <- rpar(m4.mixed, "osiOS")
+summary(iOS.distr)
+mean(iOS.distr)
+med(iOS.distr)
+plot(iOS.distr)
 
 # We can add that the random coefficients can be correlated
 # This is easily done by including "correlations = TRUE" 
 # as an option in the call to mlogit or by using the update function
 # provided by mlogit
-m2.mixed2 <- update(m2.mixed, correlation = TRUE)
-summary(m2.mixed2)
+m4.mixed2 <- update(m4.mixed, correlation = TRUE)
+summary(m4.mixed2)
 
 # To get a better sense of the strength of the association among random coefficients, 
 # we can extract the covariance matrix using "cov.mlogit" 
 # and then convert it to a correlation matrix using "cov2cor" from base R.
-cov2cor(cov.mlogit(m2.mixed2))
+cov2cor(cov.mlogit(m4.mixed2))
 
 # We can also obtain the standard errors of the correlations among random effects,
 # and hence perform significance test
-summary(vcov(m2.mixed2, what = "rpar", type = "cor"))
+summary(vcov(m4.mixed2, what = "rpar", type = "cor"))
 
 # We may restrict the correlation to only random parameters with significant association
-m2.mixed3 <- update(m2.mixed2, correlation = c("seat7", "seat8", "cargo3ft", "enginehyb",
-                                             "price35", "price40"))
+m4.mixed3 <- update(m4.mixed2, correlation = c("ram.storage12/256", "osiOS",
+                                             "displayHigh", "batteryMedium", "batteryHigh", "cameraHigh"))
 
 # The significant presence of random coefficients and their correlation 
 # can be further investigated using the ML tests, such as the ML ratio test
-lrtest(m2, m2.mixed) #Fixed effects vs. uncorrelated random effects
-lrtest(m2.mixed, m2.mixed2) #Uncorrelated random effects vs. all correlated random effects
-lrtest(m2.mixed3, m2.mixed2) #partially correlated random effects vs. all correlated random effects
+lrtest(m4, m4.mixed) #Fixed effects vs. uncorrelated random effects
+lrtest(m4.mixed, m4.mixed2) #Uncorrelated random effects vs. all correlated random effects
+lrtest(m4.mixed3, m4.mixed2) #partially correlated random effects vs. all correlated random effects
 
 # Simulating shares
 # To compute share predictions with a mixed MNL model,
@@ -302,29 +363,55 @@ predict.mixed.mnl <- function(model, data, nresp=1000) {
 }
 
 set.seed(1111)
-predict.mixed.mnl(m2.mixed2, data=new.data)
+predict.mixed.mnl(m4.mixed3, data=new.data)
 
-################################
+BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nresp=1000) {
+  dataModel <- model$model
+  dataModel$probabilities <- NULL
+  dataModel$linpred <- NULL
+  idx <- dataModel$idx 
+  dataModel$idx <- NULL
+  dataModel <- data.frame(dataModel, idx)
+  idVar <- unique(dataModel[,names(idx)[1]])
+  
+  bootstrapping <- function(x) {
+    idbootsamp <- data.frame(sample(idVar, replace=T))
+    names(idbootsamp) <- names(idx)[1]
+    bootsamp <- merge(idbootsamp, dataModel, by=names(idx)[1], all.x=T)
+    bootsamp[,names(idx)[1]] <- rep(1:length(table(idx[,1])), each=length(table(idx[,3])))
+    bootsamp.mlogit  <- dfidx(bootsamp, idx = list(c(names(idx)[1:2]), names(idx)[3]),
+                              drop.index=F)    
+    bootfit <- update(model, data = bootsamp.mlogit)
+    data.model <- model.matrix(update(bootfit$formula, 0 ~ .), data = data)[,-1]
+    coef.Sigma <- cov.mlogit(bootfit)
+    coef.mu <- bootfit$coef[1:dim(coef.Sigma)[1]]
+    draws <- mvrnorm(n=nresp, coef.mu, coef.Sigma)
+    shares <- matrix(NA, nrow=nresp, ncol=nrow(data))
+    for (i in 1:nresp) {
+      utility <- data.model%*%draws[i,]
+      share <- exp(utility)/sum(exp(utility))
+      shares[i,] <- share
+    }
+    colMeans(shares)
+  }
+  
+  cl <- makeCluster(detectCores())
+  clusterEvalQ(cl, {
+    library(mlogit)
+    library(MASS) })
+  clusterExport(cl, varlist=c("idVar", "dataModel", "idx", "model", "data", "nresp", 
+                              paste(model$call$rpar)), envir=environment())
+  bootdistr <- parLapply(cl, 1:nsim, fun=bootstrapping)
+  stopCluster(cl)
+  
+  bootdistr <- do.call(cbind, bootdistr)
+  lowl <- (1-conflevel)/2
+  upl <- 1-lowl  
+  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl))))
+  pointpred <- predict.mixed.mnl(model, data, nresp)
+  predictedShares <- cbind(pointpred[,1], bootperc, pointpred[,2:ncol(pointpred)])
+  names(predictedShares)[1] <- "share" 
+  predictedShares
+}
 
-### Assessing the effects of individual-level predictors
-# To assess if consumer heterogeneity can be explained by their individual characteristics
-# we can study the relationship between the individual part worth and the individual-level variables.
-# Individual part worth can be extracted using fitted(), with the "type" argument set to "parameters". 
-PW.ind <- fitted(m2.mixed2, type = "parameters")
-head(PW.ind)
-
-# We can use merge() to include the individual-level variable "carpool" 
-carpool.data <- unique(smartphones[,c(1,4)])
-names(PW.ind)[1] <- "resp.id"
-PW.ind <- merge(PW.ind, carpool.data, by="resp.id")
-
-# Let's focus on the seat8 random effect 
-library(lattice)
-histogram(~ seat8 | carpool, data=PW.ind)
-boxplot(seat8 ~ carpool, data=PW.ind)
-by(PW.ind$seat8, PW.ind$carpool, mean)
-t.test(seat8 ~ carpool, data=PW.ind) # heterogeneity about preference for 8-seats is at least partially
-                                     # significantly explained by carpool
-
-
-
+BootCI.predict.mixed.mnl(m4.mixed2, new.data)
