@@ -407,16 +407,16 @@ BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nres
   bootdistr <- do.call(cbind, bootdistr)
   lowl <- (1-conflevel)/2
   upl <- 1-lowl  
-  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl), na.rm = T)))
+  bootperc <- t(apply(bootdistr, 1, function(x) quantile(x, probs=c(lowl, upl))))
   pointpred <- predict.mixed.mnl(model, data, nresp)
   predictedShares <- cbind(pointpred[,1], bootperc, pointpred[,2:ncol(pointpred)])
   names(predictedShares)[1] <- "share" 
   predictedShares
 }
 
-BootCI.predict.mixed.mnl(m4.mixed2, new.data)
+BootCI.predict.mixed.mnl(m4.mixed2, new.data, nresp = 3, nsim = 3)
 
-# share       2.5%      97.5% ram.storage      os display dailyuse camera battery price
+#            share       2.5%      97.5% ram.storage      os display dailyuse camera battery price
 # 403  0.031854328 0.04273707 0.04273707        4/64 Android  Medium   Medium Medium    High     L
 # 223  0.058678450 0.09363941 0.09363941        4/64 Android  Medium      Low Medium  Medium     L
 # 878  0.058508292 0.17224177 0.17224177       8/128 Android    High      Low Medium    High    ML
