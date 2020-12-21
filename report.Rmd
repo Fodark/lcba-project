@@ -337,7 +337,7 @@ predict.mixed.mnl <- function(model, data, nresp=1000) {
 }
 ```
 
-```{r boot_mmnl, echo=FALSE}
+```{r boot_mmnl_def, echo=FALSE}
 BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nresp=1000) {
   dataModel <- model$model
   dataModel$probabilities <- NULL
