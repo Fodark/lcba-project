@@ -22,7 +22,7 @@ The study has been conducted through the use of a choice-based conjoint analysis
 
 # Data Analysis
 
-```{r import}
+```{r import, results='hide'}
 library(mlogit)
 library(parallel)
 library(MASS)
@@ -58,7 +58,7 @@ smartphones.mlogit <- dfidx(smartphones.df, idx = list(c("quest.id", "resp.id"),
                         levels=c("1", "2", "3"))
 ```
 
-```{r fmnl}
+```{r fmnl, results='hide'}
 # Fit the mlogit model to the data
 fmnl.intercept <- mlogit(choice ~ price + ram.storage + os + display + 
                dailyuse + camera + battery, data = smartphones.mlogit)
@@ -77,7 +77,7 @@ summary(fmnl.no.intercept)
 lrtest(fmnl.no.intercept, fmnl.intercept)
 ```
 
-```{r fmnl_price_quantitative}
+```{r fmnl_price_quantitative, results='hide'}
 # Fit the model without intercept parameters and with price as a quantitative variable
 fmnl.no.intercept.quantitative <- mlogit(choice ~ as.numeric(as.character(price)) + ram.storage + os + display + dailyuse + camera + battery | -1, data = smartphones.mlogit)
 summary(fmnl.no.intercept.quantitative)
@@ -91,12 +91,12 @@ With the last model, having price as a quantitative variable, we can compute the
 
 ```{r willingness}
 #coef(m3)["ram.storage8/128"]/(coef(m3)["as.numeric(as.character(price))"])
-coef(fmnl.no.intercept.quantitative)["ram.storage12/256"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
+#coef(fmnl.no.intercept.quantitative)["ram.storage12/256"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 coef(fmnl.no.intercept.quantitative)["osiOS"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 #coef(m3)["displayMedium"]/(coef(m3)["as.numeric(as.character(price))"])
-coef(fmnl.no.intercept.quantitative)["displayHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
+#coef(fmnl.no.intercept.quantitative)["displayHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 #coef(m3)["dailyuseMedium"]/(coef(m3)["as.numeric(as.character(price))"])
-coef(fmnl.no.intercept.quantitative)["dailyuseHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
+#coef(fmnl.no.intercept.quantitative)["dailyuseHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 #coef(m3)["cameraMedium"]/(coef(m3)["as.numeric(as.character(price))"])
 coef(fmnl.no.intercept.quantitative)["cameraHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 #coef(m3)["batteryMedium"]/(coef(m3)["as.numeric(as.character(price))"])
@@ -290,7 +290,7 @@ plot(m.mixed)
 
 We can add correlation among variables to the model
 
-```{r mixed_correlation}
+```{r mixed_correlation, results='hide'}
 m.mixed.cor <- update(m.mixed, correlation = TRUE)
 summary(m.mixed.cor)
 
