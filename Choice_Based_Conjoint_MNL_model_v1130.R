@@ -363,7 +363,9 @@ predict.mixed.mnl <- function(model, data, nresp=1000) {
 }
 
 set.seed(1111)
-predict.mixed.mnl(m4.mixed3, data=new.data)
+# Matrix isues with m4.mixed3, tet computed with m4.mixed2
+# predict.mixed.mnl(m4.mixed3, data=new.data)
+predict.mixed.mnl(m4.mixed2, data=new.data)
 
 BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nresp=1000) {
   dataModel <- model$model
@@ -414,7 +416,7 @@ BootCI.predict.mixed.mnl <- function(model, data, nsim=500, conflevel=0.95, nres
   predictedShares
 }
 
-BootCI.predict.mixed.mnl(m4.mixed2, new.data, nresp = 3, nsim = 3)
+BootCI.predict.mixed.mnl(m4.mixed2, new.data, nresp = 5, nsim = 10)
 
 #            share       2.5%      97.5% ram.storage      os display dailyuse camera battery price
 # 403  0.031854328 0.04273707 0.04273707        4/64 Android  Medium   Medium Medium    High     L
