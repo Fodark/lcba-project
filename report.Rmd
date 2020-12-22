@@ -3,8 +3,8 @@ title: "Laboratory of Customer and Business Analytics - Smartphones Report"
 author: "Dall'Asen Nicola - Debeni Andrea - Zorzoni Riccardo"
 date: "12/21/2020"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 # Introduction
@@ -118,7 +118,7 @@ summary(fmnl.no.intercept.quantitative)
 ```{r lrtest_2}
 lrtest(fmnl.no.intercept.quantitative, fmnl.no.intercept)
 ```
-Firstly, we tried to fit a mlogit model to the data: the best solution was the model without intercept parameters and with price represented as a qualitative variable. This model showed positive estimated coefficients for every medium or high feature with a great significance (***), while, with a lower significance level, the daily use values showed a negative estimated coefficient. As expected, price has a negative estimated coefficient and its significance is high (***). Another important aspect is that the frequency of alternative chosen by respondents is balanced (profile 1: 0.378, profile 2: 0.36, profile 3: 0.262), hence we can assume that the position of every profile hasn’t influenced the respondents’ choices.
+Firstly, we tried to fit a mlogit model to the data: the best solution was the model without intercept parameters and with price represented as a qualitative variable. This model showed positive estimated coefficients for every medium or high feature with a great significance (\*\*\*), while, with a lower significance level, the daily use values showed a negative estimated coefficient. As expected, price has a negative estimated coefficient and its significance is high (\*\*\*). Another important aspect is that the frequency of alternative chosen by respondents is balanced (profile 1: 0.378, profile 2: 0.36, profile 3: 0.262), hence we can assume that the position of every profile hasn’t influenced the respondents’ choices.
 
 With the last model, having price as a quantitative variable, we can compute the willingness to pay for some features (let's keep the highest??? dunno)
 
@@ -158,7 +158,7 @@ fmnl.no.intercept.ranges <- mlogit(choice ~ price + ram.storage + os + display +
 summary(fmnl.no.intercept.ranges)
 ```
 
-After having added the price range and fitted the new data in a mlogit function, a more precise analysis has been performed: iOS operating system is slightly less important than in the previous model (**), as well as Medium-Low and Medium price ranges and daily use features. On the other hand, Medium-High and High price ranges are still very relevant for the model (***).
+After having added the price range and fitted the new data in a mlogit function, a more precise analysis has been performed: iOS operating system is slightly less important than in the previous model (\*\*), as well as Medium-Low and Medium price ranges and daily use features. On the other hand, Medium-High and High price ranges are still very relevant for the model (\*\*\*).
 
 ```{r generate_designs}
 attributes <- list(ram.storage=names(table(updated.smartphones.mlogit$ram.storage)),
@@ -270,6 +270,7 @@ To have more statistical-relevant results let's calculate confidence intervals f
 BootCI.predict.mnl(fmnl.no.intercept.ranges, new.data)
 ```
 
+By predicting the mnl for this last model, we can find a preference for smartphone with Medium-Low or Medium price range, with an Android operating system and 8/128GB RAM/Storage values, a high level of battery and display, a medium level of camera features and variable level of daily use parameters.
 
 ```{r sensitivity, echo=FALSE}
 sensitivity.mnl <- function(model, attrib, base.data, competitor.data) {
@@ -307,8 +308,6 @@ grid(nx=NA, ny=NULL)
 
 ![Sensitivity plot](./images/sensitivy_plot.png)
 
-By predicting the mnl for this last model, we can find a preference for smartphone with Medium-Low or Medium price range, with an Android operating system and 8/128GB RAM/Storage values, a high level of battery and display, a medium level of camera features and variable level of daily use parameters. 
-
 The predicted share sensitivity shows an important decrease when the price rises (-0.034 from Low to High range) or when the battery parameter decreases (-0.033 from High to Low). A great camera is important (0.05 from Medium to High), as well as an iOS operating system (0.042 more than Android), a good display (0.035 from Medium to High) and a great ram/storage (0.097 from 4/64 to 12/256).
 
 
@@ -332,7 +331,11 @@ summary(m.mixed)
 plot(m.mixed)
 ```
 
-The mixed mnl model mostly confirmed the previous results, but it stressed the importance of the iOS operating system (***). **Manca la visual summary**
+The mixed mnl model mostly confirmed the previous results, but it stressed the importance of the iOS operating system (\*\*\*).
+
+From this plot we can understand that most of the people are interested into iOS as operating system and that therefore it should be taken into consideration when making managerial choices.
+
+On the other hand, the only other variable that shows heterogeneity is the high daily usage but in every model we tested it has no statistical importance to determine the choice.
 
 
 We can add correlation among variables to the model
@@ -447,3 +450,19 @@ BootCI.predict.mixed.mnl(m.mixed.cor, data=new.data, nresp = 3, nsim = 3)
 The last prediction made with a mixed mnl had to be customised: in order to perform the analysis and computing the confidence intervals, the function parameters were set to 5 respondents and 10 simulations because with default values the program would lasts for hours given the dimension of the dataset and the variance/covariance matrix. 
 
 Obviously, confidence intervals ended up to be pretty big, but the preference shares were realistic: the preferred smartphone was defined as an Android based smartphone with a Medium-Low price range, 8GB of RAM and 128 of storage, with a medium camera level and high levels of battery, display and daily use. This profile, among all the others, would retain a 35% user’s preference share.
+
+# Conclusions
+
+Results showed and confirmed some of our prior beliefs, in particular we understood that the most prominent price sector is the medium to medium-low, where most of the preference is located.
+
+But a non-negligible portion of users are located in the medium-high and high sector and in this context smartphones with iOS as operating system result as winners of customers' preferences.
+
+From the willingness-to-pay we got that people are going to pay up to 200 more euros in order to buy a smartphone equipped with iOS as operating system. Given that the OS is the only "non-physical" property that we included in the survey we think some considerations should be made.
+
+We know that from a technological point of view the advantages of iOS is the optimization made between software and hardware and the easiness to use that some part of users seek. So the reasons behind these choice has not to be thought as a "hard" choice but more of a "soft" one, where the brand makes a great difference.
+
+## Managerial advices
+
+From a managerial point of view our results suggest that the range where investments should be made is the medium to medium-low, and particular attention should be put into the quality/price ratio, with an eye on a good amount of RAM and storage, and good display and battery.
+
+On the other hand, if one wants to enter the high-end market he/she has to consider the predominant share that iOS has in that range. 
