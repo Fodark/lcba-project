@@ -12,13 +12,41 @@ output:
 The aim of this study is to provide an insight on the most important features that customer take into consideration when they choose a new smartphone, in order to provide market segments and analyze customers' tastes.
 The study has been conducted through the use of a choice-based conjoint analysis on data collected through an online survey thanks to the statistical tool of Multinomial Logistic Regression and Bootstrap prediction.
 
+## Expectations and common sense
+
+Before starting the analysis, we had some expectations based on our personal experiences as scientific students and tech enthusiasts. The first concern of an average user is about the price: how much he can afford at the moment of the purchase is, inevitably, a major limit to all the other considerations on the smartphone’s features, and consequently the quality/price ratio should always be maximized. This ratio is clearly dependent on different features, and it changes from user to user.
+
+Users could be grouped into categories, and even if the precise identification of these categories is not the aim of this research, their experience-driven identification helped us in shaping a common sense in what we may expect from the results of the analysis. For example, a user not used to taking pictures or sharing them on social networks would be more inclined to buy a smartphone that works best on its everyday usage, while an Instagram addicted teenager would prefer the so-called “camera-phone”. Considering that the average age of the respondents should be low (university students, mostly), we were expecting slight advantages in features like daily usage and camera, given the high amount of time spent with the smartphone by young people and their propensity to use social media and share pictures and videos on them. In our opinion, operating systems shouldn’t affect the results much, especially because it’s actually difficult to have a full understanding of all the aspects related to different OS from a simple form. Moreover, the small number of devices released by Apple during the year could affect negatively on its result given its small appearance ratio over the totality of profiles. 
+
+
 ## Data collection
 
+n order to collect the data needed for our analysis we designed a survey where respondents were asked to choose the smartphone profile that best suited their real-life choices. How the profiles were generated is explained further in this section. Each person answering the survey was asked to answer 13 questions and each question was composed by 3 different smartphone profiles.
+
+Every profile is composed by several features that commonly describe such product, i.e. price, RAM and storage, quality of the display, daily usage (if the product is able to carry out daily tasks in an optimal way), quality of the camera and battery. Given the extreme heterogeneity of evaluation of such features, a known and established source was taken as ground truth for these values [2], this source provides reviews for different smartphones and a numeric summary of the features taken into account. To avoid having respondents deal with many numerical values which provide little to none meaning to the average user, the features, except price and RAM/storage, were grouped into three categories, i.e. "low", "medium" and "high" and the conversion tables are provided below. Prices were rounded to the closest hundredth, while RAM/storage was grouped into the three most common configurations for recent smartphones, "4/64 GB" for low-end devices, "8/128" for medium-end and "12/256" for high-end.
+
+We decided to use only 2020’s smartphones, because the price may vary due to the rapid changes and evolution of the hardware. In order to have a wide range of profiles, we selected 39 smartphones of the last year. Then we put the price averaging the most popular e-commerce site and physical market. Almost all our profiles are with Android operating system, due to the poor range of Apple products with respect to the other firms. After that we converted the features using the table below.
+
+At this point, we were able to create the final table from which we started to build the survey.
+The table is shown below, and it is possible to see the original value and the transformed one.
+
+We built the survey randomly shuffling the 39 profiles into 13 choice questions.
+The survey was done by 109 respondents using Google Form, and all the results were stored in Google Sheet. Therefore, these data have been reorganized to show the chosen profile at each question. After that, we prepared the data for the future analysis, transposing the table and interpolating it with all the profiles.
+
+At this point, we had a table with all the respondents’ choice, and all the features for each profile.
+
+
 ### Method used
-...
+
+o avoid generating every possible smartphone configuration (considering every hundredth of the price as one category it would have led to more than 5000 different profiles, most of which are unrealistic) we considered a subset of smartphone released on the market during 2020 which have the most different characteristics, similarly to the fractional factorial design principle [1], and after applying the transformations listed above we used them as our products' profiles for the survey.
+The survey was presented to an heterogeneous group of people with the aim to provide a representative sample and capture the most people's behavior. It was presented to a total of N=109 people through Google Forms.
 
 ### Data preprocessing
-...
+
+Google Forms collects respondents' answers in a format which is not suitable for our analysis (MNL through mlogit R package), it provides only the content of the answer the user chose and therefore, in order to construct the dataset in a suitable way, we took several preprocessing steps involving several technologies.
+As the first step we worked on spreadsheets to transform the content of the answer into the ID of the smartphone profile, which we have kept in a separate sheet. With this information we could easily retrieve the whole chosen profile but a problem arose, because there was no easy manner to include, for every respondent for every question, the options we had not chosen. For this task we involved the use of Python and pandas dataframes [3], which provided us with SQL-like join operator to construct respondents' profiles (the code is available in the dataTransform.ipynb Python notebook). The resulting data are in a long format which provide many benefits, first of all many advanced statistical libraries prefer this data format for computing and graphing (e.g. ggplot, lm or t.test) and secondly it provides a conceptual clarity and easiness to summary data, which cannot be achieved by wide data because every observation is a mix of a unit of analysis and and a value-holding variable. [4]
+These resulting data were then imported in R and before starting the actual analysis a last step was required, converting strings to factors in order to obtain ordinal categorical variables.
+
 
 # Data Analysis
 
@@ -86,6 +114,7 @@ summary(fmnl.no.intercept.quantitative)
 ```{r lrtest_2}
 lrtest(fmnl.no.intercept.quantitative, fmnl.no.intercept)
 ```
+Firstly, we tried to fit a mlogit model to the data: the best solution was the model without intercept parameters and with price represented as a qualitative variable. This model showed positive estimated coefficients for every medium or high feature with a great significance (***), while, with a lower significance level, the daily use values showed a negative estimated coefficient. As expected, price has a negative estimated coefficient and its significance is high (***). Another important aspect is that the frequency of alternative chosen by respondents is balanced (profile 1: 0.378, profile 2: 0.36, profile 3: 0.262), hence we can assume that the position of every profile hasn’t influenced the respondents’ choices.
 
 With the last model, having price as a quantitative variable, we can compute the willingness to pay for some features (let's keep the highest??? dunno)
 
@@ -102,6 +131,8 @@ coef(fmnl.no.intercept.quantitative)["cameraHigh"]/(coef(fmnl.no.intercept.quant
 #coef(m3)["batteryMedium"]/(coef(m3)["as.numeric(as.character(price))"])
 coef(fmnl.no.intercept.quantitative)["batteryHigh"]/(coef(fmnl.no.intercept.quantitative)["as.numeric(as.character(price))"])
 ```
+
+The willingness to pay has also been computed: results show that an average user is willing to pay up to 215€ more to purchase a smartphone with an iOS operating system than its counterpart with an Android operating system. Camera and battery are also extremely important, since it is shown that the willingness to pay for a high level of both features is about 475€ and 620€, respectively. 
 
 Instead of keeping this amount of levels for the price variable, we group it into the 5 categories explained at the beginning 
 
@@ -122,6 +153,8 @@ fmnl.no.intercept.ranges <- mlogit(choice ~ price + ram.storage + os + display +
                dailyuse + camera + battery | -1, data = updated.smartphones.mlogit)
 summary(fmnl.no.intercept.ranges)
 ```
+
+After having added the price range and fitted the new data in a mlogit function, a more precise analysis has been performed: iOS operating system is slightly less important than in the previous model (**), as well as Medium-Low and Medium price ranges and daily use features. On the other hand, Medium-High and High price ranges are still very relevant for the model (***).
 
 ```{r generate_designs}
 attributes <- list(ram.storage=names(table(updated.smartphones.mlogit$ram.storage)),
@@ -268,6 +301,11 @@ barplot(tradeoff$increase, horiz=FALSE, names.arg=tradeoff$level,
 grid(nx=NA, ny=NULL)
 ```
 
+By predicting the mnl for this last model, we can find a preference for smartphone with Medium-Low or Medium price range, with an Android operating system and 8/128GB RAM/Storage values, a high level of battery and display, a medium level of camera features and variable level of daily use parameters. 
+
+The predicted share sensitivity shows an important decrease when the price rises (-0.034 from Low to High range) or when the battery parameter decreases (-0.033 from High to Low). A great camera is important (0.05 from Medium to High), as well as an iOS operating system (0.042 more than Android), a good display (0.035 from Medium to High) and a great ram/storage (0.097 from 4/64 to 12/256).
+
+
 ## Control for customers' heterogeneity 
 
 Let's fit a MMNL model in order to check for customers' heterogeneity
@@ -287,6 +325,9 @@ summary(m.mixed)
 ```{r plot_mixed}
 plot(m.mixed)
 ```
+
+The mixed mnl model mostly confirmed the previous results, but it stressed the importance of the iOS operating system (***). **Manca la visual summary**
+
 
 We can add correlation among variables to the model
 
@@ -397,4 +438,6 @@ And compute confidence intervals
 ```{r boot_mmnl}
 BootCI.predict.mixed.mnl(m.mixed.cor, data=new.data, nresp = 3, nsim = 3)
 ```
+The last prediction made with a mixed mnl had to be customised: in order to perform the analysis and computing the confidence intervals, the function parameters were set to 5 respondents and 10 simulations because with default values the program would lasts for hours given the dimension of the dataset and the variance/covariance matrix. 
 
+Obviously, confidence intervals ended up to be pretty big, but the preference shares were realistic: the preferred smartphone was defined as an Android based smartphone with a Medium-Low price range, 8GB of RAM and 128 of storage, with a medium camera level and high levels of battery, display and daily use. This profile, among all the others, would retain a 35% user’s preference share.
