@@ -21,7 +21,7 @@ Users could be grouped into categories, and even if the precise identification o
 
 ## Data collection
 
-n order to collect the data needed for our analysis we designed a survey where respondents were asked to choose the smartphone profile that best suited their real-life choices. How the profiles were generated is explained further in this section. Each person answering the survey was asked to answer 13 questions and each question was composed by 3 different smartphone profiles.
+In order to collect the data needed for our analysis we designed a survey where respondents were asked to choose the smartphone profile that best suited their real-life choices. How the profiles were generated is explained further in this section. Each person answering the survey was asked to answer 13 questions and each question was composed by 3 different smartphone profiles.
 
 Every profile is composed by several features that commonly describe such product, i.e. price, RAM and storage, quality of the display, daily usage (if the product is able to carry out daily tasks in an optimal way), quality of the camera and battery. Given the extreme heterogeneity of evaluation of such features, a known and established source was taken as ground truth for these values [2], this source provides reviews for different smartphones and a numeric summary of the features taken into account. To avoid having respondents deal with many numerical values which provide little to none meaning to the average user, the features, except price and RAM/storage, were grouped into three categories, i.e. "low", "medium" and "high" and the conversion tables are provided below. Prices were rounded to the closest hundredth, while RAM/storage was grouped into the three most common configurations for recent smartphones, "4/64 GB" for low-end devices, "8/128" for medium-end and "12/256" for high-end.
 
@@ -171,7 +171,7 @@ attributes <- list(ram.storage=names(table(updated.smartphones.mlogit$ram.storag
 all.designs <- expand.grid(attributes) 
 ```
 
-We then choose a reasonable amount of profiles for every price range and determing the preference shares separately, the "best" profiles for every category are then compared
+We then choose a reasonable amount of profiles for every price range and determine the preference shares separately, the "best" profiles for every category are then compared
 
 ```{r preference_by_price}
 all.designs.low <- all.designs[all.designs$price=="L" & all.designs$os=="Android" & all.designs$ram.storage=="4/64",]
@@ -278,7 +278,7 @@ sensitivity.mnl <- function(model, attrib, base.data, competitor.data) {
   # model: mlogit object returned by mlogit() function
   # attrib: list of vectors with attribute levels to be used in sensitivity
   # base.data: data frame containing baseline design of target product
-  # competitor.data: data frame contining design of competitive set
+  # competitor.data: data frame containing design of competitive set
   data <- rbind(base.data, competitor.data)
   base.share <- predict.mnl(model, data)[1,1]
   share <- NULL
@@ -447,7 +447,7 @@ And compute confidence intervals
 ```{r boot_mmnl}
 BootCI.predict.mixed.mnl(m.mixed.cor, data=new.data, nresp = 3, nsim = 3)
 ```
-The last prediction made with a mixed mnl had to be customised: in order to perform the analysis and computing the confidence intervals, the function parameters were set to 5 respondents and 10 simulations because with default values the program would lasts for hours given the dimension of the dataset and the variance/covariance matrix. 
+The last prediction made with a mixed mnl had to be customized: in order to perform the analysis and computing the confidence intervals, the function parameters were set to 5 respondents and 10 simulations because with default values the program would lasts for hours given the dimension of the dataset and the variance/covariance matrix. 
 
 Obviously, confidence intervals ended up to be pretty big, but the preference shares were realistic: the preferred smartphone was defined as an Android based smartphone with a Medium-Low price range, 8GB of RAM and 128 of storage, with a medium camera level and high levels of battery, display and daily use. This profile, among all the others, would retain a 35% user’s preference share.
 
