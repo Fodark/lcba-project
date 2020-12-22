@@ -27,8 +27,12 @@ Every profile is composed by several features that commonly describe such produc
 
 We decided to use only 2020’s smartphones, because the price may vary due to the rapid changes and evolution of the hardware. In order to have a wide range of profiles, we selected 39 smartphones of the last year. Then we put the price averaging the most popular e-commerce site and physical market. Almost all our profiles are with Android operating system, due to the poor range of Apple products with respect to the other firms. After that we converted the features using the table below.
 
+![Conversion table](./images/lcba2.png)
+
 At this point, we were able to create the final table from which we started to build the survey.
 The table is shown below, and it is possible to see the original value and the transformed one.
+
+![Smartphone dataset](./images/lcba1.png)
 
 We built the survey randomly shuffling the 39 profiles into 13 choice questions.
 The survey was done by 109 respondents using Google Form, and all the results were stored in Google Sheet. Therefore, these data have been reorganized to show the chosen profile at each question. After that, we prepared the data for the future analysis, transposing the table and interpolating it with all the profiles.
@@ -290,7 +294,7 @@ sensitivity.mnl <- function(model, attrib, base.data, competitor.data) {
 
 ### Calculate and plot sensitivity
 
-```{r plot_sensitivity}
+```{r plot_sensitivity, results='hide', eval=FALSE}
 base.data <- new.data[1,]
 competitor.data <- new.data[-1,]
 (tradeoff <- sensitivity.mnl(fmnl.no.intercept.ranges, attributes, base.data, competitor.data))
@@ -300,6 +304,8 @@ barplot(tradeoff$increase, horiz=FALSE, names.arg=tradeoff$level,
         ylim=c(-0.1,0.11))
 grid(nx=NA, ny=NULL)
 ```
+
+![Sensitivity plot](./images/sensitivy_plot.png)
 
 By predicting the mnl for this last model, we can find a preference for smartphone with Medium-Low or Medium price range, with an Android operating system and 8/128GB RAM/Storage values, a high level of battery and display, a medium level of camera features and variable level of daily use parameters. 
 
