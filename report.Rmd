@@ -120,7 +120,7 @@ lrtest(fmnl.no.intercept.quantitative, fmnl.no.intercept)
 ```
 Firstly, we tried to fit a mlogit model to the data: the best solution was the model without intercept parameters and with price represented as a qualitative variable. This model showed positive estimated coefficients for every medium or high feature with a great significance (\*\*\*), while, with a lower significance level, the daily use values showed a negative estimated coefficient. As expected, price has a negative estimated coefficient and its significance is high (\*\*\*). Another important aspect is that the frequency of alternative chosen by respondents is balanced (profile 1: 0.378, profile 2: 0.36, profile 3: 0.262), hence we can assume that the position of every profile hasn’t influenced the respondents’ choices.
 
-With the last model, having price as a quantitative variable, we can compute the willingness to pay for some features (let's keep the highest??? dunno)
+With the last model, having price as a quantitative variable, we can compute the willingness to pay for some features
 
 ```{r willingness}
 #coef(m3)["ram.storage8/128"]/(coef(m3)["as.numeric(as.character(price))"])
