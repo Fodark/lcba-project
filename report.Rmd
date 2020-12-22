@@ -42,7 +42,7 @@ At this point, we had a table with all the respondents’ choice, and all the fe
 
 ### Method used
 
-o avoid generating every possible smartphone configuration (considering every hundredth of the price as one category it would have led to more than 5000 different profiles, most of which are unrealistic) we considered a subset of smartphone released on the market during 2020 which have the most different characteristics, similarly to the fractional factorial design principle [1], and after applying the transformations listed above we used them as our products' profiles for the survey.
+To avoid generating every possible smartphone configuration (considering every hundredth of the price as one category it would have led to more than 5000 different profiles, most of which are unrealistic) we considered a subset of smartphone released on the market during 2020 which have the most different characteristics, similarly to the fractional factorial design principle [1], and after applying the transformations listed above we used them as our products' profiles for the survey.
 The survey was presented to an heterogeneous group of people with the aim to provide a representative sample and capture the most people's behavior. It was presented to a total of N=109 people through Google Forms.
 
 ### Data preprocessing
@@ -466,3 +466,13 @@ We know that from a technological point of view the advantages of iOS is the opt
 From a managerial point of view our results suggest that the range where investments should be made is the medium to medium-low, and particular attention should be put into the quality/price ratio, with an eye on a good amount of RAM and storage, and good display and battery.
 
 On the other hand, if one wants to enter the high-end market he/she has to consider the predominant share that iOS has in that range. 
+
+### References
+
+[1] Taherdoost, Hamed. (2016). Sampling Methods in Research Methodology; How to Choose a Sampling Technique for Research. International Journal of Academic Research in Management. 5. 18-27. 10.2139/ssrn.3205035. 
+
+[2] Galeazzi Andrea, https://andreagaleazzi.com/
+
+[3] pandas - Python Data Analysis Library, https://pandas.pydata.org
+
+[4] Tidy data, Hadley Wickham; *The Journal of Statistical Software*, vol. 59, 2014.

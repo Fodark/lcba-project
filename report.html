@@ -406,7 +406,7 @@ summary {
 <p>At this point, we had a table with all the respondents’ choice, and all the features for each profile.</p>
 <div id="method-used" class="section level3">
 <h3>Method used</h3>
-<p>o avoid generating every possible smartphone configuration (considering every hundredth of the price as one category it would have led to more than 5000 different profiles, most of which are unrealistic) we considered a subset of smartphone released on the market during 2020 which have the most different characteristics, similarly to the fractional factorial design principle [1], and after applying the transformations listed above we used them as our products’ profiles for the survey. The survey was presented to an heterogeneous group of people with the aim to provide a representative sample and capture the most people’s behavior. It was presented to a total of N=109 people through Google Forms.</p>
+<p>To avoid generating every possible smartphone configuration (considering every hundredth of the price as one category it would have led to more than 5000 different profiles, most of which are unrealistic) we considered a subset of smartphone released on the market during 2020 which have the most different characteristics, similarly to the fractional factorial design principle [1], and after applying the transformations listed above we used them as our products’ profiles for the survey. The survey was presented to an heterogeneous group of people with the aim to provide a representative sample and capture the most people’s behavior. It was presented to a total of N=109 people through Google Forms.</p>
 </div>
 <div id="data-preprocessing" class="section level3">
 <h3>Data preprocessing</h3>
@@ -649,18 +649,18 @@ predict.mnl(fmnl.no.intercept.ranges, new.data)</code></pre>
 <p>To have more statistical-relevant results let’s calculate confidence intervals for the shares</p>
 <pre class="r"><code>BootCI.predict.mnl(fmnl.no.intercept.ranges, new.data)</code></pre>
 <pre><code>##           share        2.5%      97.5% ram.storage      os display dailyuse
-## 403  0.03529125 0.018194644 0.05460745        4/64 Android  Medium   Medium
-## 223  0.01739224 0.006388947 0.03749116        4/64 Android  Medium      Low
-## 878  0.23993098 0.090499441 0.50538340       8/128 Android    High      Low
-## 914  0.22517030 0.142710227 0.29180214       8/128 Android    High     High
-## 1400 0.20061077 0.113464020 0.27404137       8/128 Android    High     High
-## 1382 0.12597255 0.078654345 0.16119230       8/128 Android    High   Medium
-## 1887 0.03742550 0.017127929 0.06287182      12/256 Android    High     High
-## 1779 0.03076685 0.017315439 0.04381748      12/256 Android    High     High
-## 1763 0.02964888 0.014913373 0.05149270       8/128     iOS    High   Medium
-## 2267 0.02433444 0.013504751 0.03691673       8/128     iOS    High     High
-## 2250 0.02285392 0.011054409 0.03952769      12/256     iOS    High   Medium
-## 2264 0.01060230 0.005561851 0.01645400       8/128 Android    High     High
+## 403  0.03529125 0.017582767 0.05367411        4/64 Android  Medium   Medium
+## 223  0.01739224 0.006539716 0.03687912        4/64 Android  Medium      Low
+## 878  0.23993098 0.095447574 0.49445465       8/128 Android    High      Low
+## 914  0.22517030 0.141545438 0.29905502       8/128 Android    High     High
+## 1400 0.20061077 0.110768604 0.27488096       8/128 Android    High     High
+## 1382 0.12597255 0.080763904 0.16322201       8/128 Android    High   Medium
+## 1887 0.03742550 0.017187893 0.06238417      12/256 Android    High     High
+## 1779 0.03076685 0.016786211 0.04376160      12/256 Android    High     High
+## 1763 0.02964888 0.014705493 0.05274277       8/128     iOS    High   Medium
+## 2267 0.02433444 0.012269837 0.03591775       8/128     iOS    High     High
+## 2250 0.02285392 0.010074103 0.03811743      12/256     iOS    High   Medium
+## 2264 0.01060230 0.005233188 0.01713784       8/128 Android    High     High
 ##      camera battery price
 ## 403  Medium    High     L
 ## 223  Medium  Medium     L
@@ -712,7 +712,7 @@ summary(m.mixed)</code></pre>
 ## 0.37756 0.36062 0.26182 
 ## 
 ## bfgs method
-## 33 iterations, 0h:0m:9s 
+## 33 iterations, 0h:0m:6s 
 ## g&#39;(-H)^-1g = 1.3E-07 
 ## gradient close to zero 
 ## 
@@ -840,18 +840,18 @@ summary(vcov(m.mixed.cor, what = &quot;rpar&quot;, type = &quot;cor&quot;))</cod
 <p>And compute confidence intervals</p>
 <pre class="r"><code>BootCI.predict.mixed.mnl(m.mixed.cor, data=new.data, nresp = 3, nsim = 3)</code></pre>
 <pre><code>##             share         2.5%        97.5% ram.storage      os display
-## 403  3.532314e-02 4.102731e-13 2.894229e-08        4/64 Android  Medium
-## 223  2.219751e-07 2.494655e-16 1.052317e-10        4/64 Android  Medium
-## 878  3.541265e-06 8.622975e-07 6.333331e-01       8/128 Android    High
-## 914  2.968455e-01 4.652847e-03 6.378790e-01       8/128 Android    High
-## 1400 2.372691e-03 2.264825e-03 2.323056e-01       8/128 Android    High
-## 1382 3.049474e-03 6.722276e-07 2.726768e-01       8/128 Android    High
-## 1887 4.892319e-03 1.008618e-06 3.105667e-01      12/256 Android    High
-## 1779 1.856822e-01 5.256895e-12 8.592704e-04      12/256 Android    High
-## 1763 3.397528e-01 1.127467e-10 3.166686e-01       8/128     iOS    High
-## 2267 1.319145e-02 3.723199e-13 7.707993e-12       8/128     iOS    High
-## 2250 1.168326e-01 3.202410e-04 3.169850e-01      12/256     iOS    High
-## 2264 2.054124e-03 1.503779e-27 4.072753e-06       8/128 Android    High
+## 403  3.532314e-02 8.460631e-08 7.381572e-06        4/64 Android  Medium
+## 223  2.219751e-07 3.048091e-16 2.026678e-13        4/64 Android  Medium
+## 878  3.541265e-06 3.805690e-13 2.957207e-08       8/128 Android    High
+## 914  2.968455e-01 3.128272e-03 3.894825e-01       8/128 Android    High
+## 1400 2.372691e-03 7.018662e-05 3.017173e-03       8/128 Android    High
+## 1382 3.049474e-03 1.284385e-02 3.276124e-01       8/128 Android    High
+## 1887 4.892319e-03 9.048391e-09 3.832849e-01      12/256 Android    High
+## 1779 1.856822e-01 6.186683e-09 2.395371e-01      12/256 Android    High
+## 1763 3.397528e-01 2.631843e-04 5.744157e-01       8/128     iOS    High
+## 2267 1.319145e-02 4.010653e-06 1.034991e-01       8/128     iOS    High
+## 2250 1.168326e-01 1.119199e-02 3.381246e-01      12/256     iOS    High
+## 2264 2.054124e-03 1.167660e-15 3.843072e-05       8/128 Android    High
 ##      dailyuse camera battery price
 ## 403    Medium Medium    High     L
 ## 223       Low Medium  Medium     L
@@ -879,6 +879,13 @@ summary(vcov(m.mixed.cor, what = &quot;rpar&quot;, type = &quot;cor&quot;))</cod
 <h2>Managerial advices</h2>
 <p>From a managerial point of view our results suggest that the range where investments should be made is the medium to medium-low, and particular attention should be put into the quality/price ratio, with an eye on a good amount of RAM and storage, and good display and battery.</p>
 <p>On the other hand, if one wants to enter the high-end market he/she has to consider the predominant share that iOS has in that range.</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<p>[1] Taherdoost, Hamed. (2016). Sampling Methods in Research Methodology; How to Choose a Sampling Technique for Research. International Journal of Academic Research in Management. 5. 18-27. 10.2139/ssrn.3205035.</p>
+<p>[2] Galeazzi Andrea, <a href="https://andreagaleazzi.com/" class="uri">https://andreagaleazzi.com/</a></p>
+<p>[3] pandas - Python Data Analysis Library, <a href="https://pandas.pydata.org" class="uri">https://pandas.pydata.org</a></p>
+<p>[4] Tidy data, Hadley Wickham; <em>The Journal of Statistical Software</em>, vol. 59, 2014.</p>
+</div>
 </div>
 </div>
 
