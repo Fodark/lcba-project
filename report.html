@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Dall’Asen Nicola - Debeni Andrea - Zorzoni Riccardo" />
+<meta name="author" content="Dall’Asen Nicola (211662) - Debeni Andrea (211664) - Zorzoni Riccardo (220500)" />
 
 <meta name="date" content="2020-12-21" />
 
@@ -374,7 +374,7 @@ summary {
 
 
 <h1 class="title toc-ignore">Laboratory of Customer and Business Analytics - Smartphones Report</h1>
-<h4 class="author">Dall’Asen Nicola - Debeni Andrea - Zorzoni Riccardo</h4>
+<h4 class="author">Dall’Asen Nicola (211662) - Debeni Andrea (211664) - Zorzoni Riccardo (220500)</h4>
 <h4 class="date">12/21/2020</h4>
 
 </div>
@@ -649,18 +649,18 @@ predict.mnl(fmnl.no.intercept.ranges, new.data)</code></pre>
 <p>To have more statistical-relevant results let’s calculate confidence intervals for the shares</p>
 <pre class="r"><code>BootCI.predict.mnl(fmnl.no.intercept.ranges, new.data)</code></pre>
 <pre><code>##           share        2.5%      97.5% ram.storage      os display dailyuse
-## 403  0.03529125 0.017524466 0.05453293        4/64 Android  Medium   Medium
-## 223  0.01739224 0.005422988 0.03849927        4/64 Android  Medium      Low
-## 878  0.23993098 0.080360747 0.46521863       8/128 Android    High      Low
-## 914  0.22517030 0.141624371 0.29838262       8/128 Android    High     High
-## 1400 0.20061077 0.126371932 0.28117777       8/128 Android    High     High
-## 1382 0.12597255 0.080417300 0.17358957       8/128 Android    High   Medium
-## 1887 0.03742550 0.018148111 0.06798047      12/256 Android    High     High
-## 1779 0.03076685 0.018009007 0.04340911      12/256 Android    High     High
-## 1763 0.02964888 0.015332764 0.05014708       8/128     iOS    High   Medium
-## 2267 0.02433444 0.014318367 0.03497167       8/128     iOS    High     High
-## 2250 0.02285392 0.011536489 0.03834447      12/256     iOS    High   Medium
-## 2264 0.01060230 0.005673512 0.01798590       8/128 Android    High     High
+## 403  0.03529125 0.018211570 0.05515714        4/64 Android  Medium   Medium
+## 223  0.01739224 0.006861458 0.03630274        4/64 Android  Medium      Low
+## 878  0.23993098 0.097789439 0.48170045       8/128 Android    High      Low
+## 914  0.22517030 0.144954876 0.30070827       8/128 Android    High     High
+## 1400 0.20061077 0.117443915 0.27105289       8/128 Android    High     High
+## 1382 0.12597255 0.083129084 0.16328737       8/128 Android    High   Medium
+## 1887 0.03742550 0.017561333 0.06668172      12/256 Android    High     High
+## 1779 0.03076685 0.016443804 0.04359808      12/256 Android    High     High
+## 1763 0.02964888 0.015435113 0.04792509       8/128     iOS    High   Medium
+## 2267 0.02433444 0.013605180 0.03590246       8/128     iOS    High     High
+## 2250 0.02285392 0.010386286 0.03870386      12/256     iOS    High   Medium
+## 2264 0.01060230 0.005544274 0.01764988       8/128 Android    High     High
 ##      camera battery price
 ## 403  Medium    High     L
 ## 223  Medium  Medium     L
@@ -712,7 +712,7 @@ summary(m.mixed)</code></pre>
 ## 0.37756 0.36062 0.26182 
 ## 
 ## bfgs method
-## 33 iterations, 0h:0m:9s 
+## 33 iterations, 0h:0m:11s 
 ## g&#39;(-H)^-1g = 1.3E-07 
 ## gradient close to zero 
 ## 
@@ -840,18 +840,18 @@ summary(vcov(m.mixed.cor, what = &quot;rpar&quot;, type = &quot;cor&quot;))</cod
 <p>And compute confidence intervals</p>
 <pre class="r"><code>BootCI.predict.mixed.mnl(m.mixed.cor, data=new.data, nresp = 3, nsim = 3)</code></pre>
 <pre><code>##             share         2.5%        97.5% ram.storage      os display
-## 403  3.532314e-02 1.312470e-06 1.860779e-01        4/64 Android  Medium
-## 223  2.219751e-07 7.721218e-04 2.247386e-02        4/64 Android  Medium
-## 878  3.541265e-06 1.164152e-06 3.019968e-01       8/128 Android    High
-## 914  2.968455e-01 7.853390e-04 3.171790e-01       8/128 Android    High
-## 1400 2.372691e-03 6.235288e-05 4.333387e-03       8/128 Android    High
-## 1382 3.049474e-03 1.352217e-05 2.639980e-03       8/128 Android    High
-## 1887 4.892319e-03 1.165529e-05 1.089327e-04      12/256 Android    High
-## 1779 1.856822e-01 5.563169e-05 3.124883e-01      12/256 Android    High
-## 1763 3.397528e-01 6.177497e-06 9.143713e-01       8/128     iOS    High
-## 2267 1.319145e-02 3.480818e-03 6.643082e-02       8/128     iOS    High
-## 2250 1.168326e-01 1.552937e-02 6.108732e-01      12/256     iOS    High
-## 2264 2.054124e-03 3.257211e-08 1.627699e-06       8/128 Android    High
+## 403  3.532314e-02 1.578973e-11 2.616601e-04        4/64 Android  Medium
+## 223  2.219751e-07 5.329978e-28 1.669993e-15        4/64 Android  Medium
+## 878  3.541265e-06 3.087256e-18 3.166701e-01       8/128 Android    High
+## 914  2.968455e-01 9.160514e-02 3.287849e-01       8/128 Android    High
+## 1400 2.372691e-03 3.245431e-03 1.670804e-01       8/128 Android    High
+## 1382 3.049474e-03 3.222098e-04 4.925020e-01       8/128 Android    High
+## 1887 4.892319e-03 1.278635e-02 3.294530e-01      12/256 Android    High
+## 1779 1.856822e-01 8.136931e-16 3.060000e-01      12/256 Android    High
+## 1763 3.397528e-01 3.186282e-10 5.178291e-04       8/128     iOS    High
+## 2267 1.319145e-02 1.285492e-18 5.054262e-08       8/128     iOS    High
+## 2250 1.168326e-01 4.002311e-06 3.166707e-01      12/256     iOS    High
+## 2264 2.054124e-03 1.215791e-24 1.456245e-09       8/128 Android    High
 ##      dailyuse camera battery price
 ## 403    Medium Medium    High     L
 ## 223       Low Medium  Medium     L

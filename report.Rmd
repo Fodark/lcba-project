@@ -1,10 +1,10 @@
 ---
 title: "Laboratory of Customer and Business Analytics - Smartphones Report"
-author: "Dall'Asen Nicola - Debeni Andrea - Zorzoni Riccardo"
+author: "Dall'Asen Nicola (211662) - Debeni Andrea (211664) - Zorzoni Riccardo (220500)"
 date: "12/21/2020"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 # Introduction
